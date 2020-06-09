@@ -23,6 +23,7 @@ public class KillZone : MonoBehaviour
 
                     PlayerController controller = collision.GetComponent<PlayerController>();
 					controller.Die();
+            Debug.Log("Die en killzone");
 		 }
 		 
 	 }

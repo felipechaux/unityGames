@@ -19,7 +19,8 @@ public class GameManager : MonoBehaviour
     public int collectedObject = 0;
 
 
-	void Awake()
+
+    void Awake()
 	{
 		if(sharedInstance==null){
 			sharedInstance=this;
@@ -56,6 +57,7 @@ public class GameManager : MonoBehaviour
     public void GameOver()
     {
        SetGameState(GameState.gameOver);
+        //audio game over
     }
 
     //menu de opciones
@@ -92,6 +94,7 @@ public class GameManager : MonoBehaviour
                 //TODO: preparar el juego para el Game Over
                 MenuManager.sharedInstance.HideGameCanvas();
                 MenuManager.sharedInstance.ShowGameOverMenu();
+             
                 break;
         }
 

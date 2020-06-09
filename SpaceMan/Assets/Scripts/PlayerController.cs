@@ -13,7 +13,8 @@ public class PlayerController : MonoBehaviour
     //identificacion de suelo
     public LayerMask groundMask;
     Animator animator;
-    Vector3 startPosition; 
+    //posicion inicial de personale
+    Vector3 startPosition;
 
     //modifcacion- rotacion de animaciones del sprite
     private SpriteRenderer mySpriteRenderer;
@@ -21,7 +22,8 @@ public class PlayerController : MonoBehaviour
     const string STATE_ALIVE = "isAlive";
     const string STATE_ONE_THE_GROUND = "isOnTheGround";
 
-    //puntos de vida y mana del jugador
+    //puntos de vida y mana del jugador - SerializeField para ver la vida en el ide --- ya que es private
+    [SerializeField]
     private int healthPoints, manaPoints;
 
     //constantes jugador
@@ -30,20 +32,32 @@ public class PlayerController : MonoBehaviour
     public const int SUPERJUMP_COST = 5;
     public const float SUPERJUMP_FORCE = 1.5f;
 
+    public float jumpRaycastDistance = 1.5f;
+
+    //colider que colisiona contra el piso
+    private BoxCollider2D colliderGround;
+    //offet inicial de collider
+    Vector2 startOffsetGround;
+
+    public AudioClip audioJump;
+    public AudioClip audioGameOver;
+
 
     void Awake()
     {
         rigidBody = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         mySpriteRenderer = GetComponent<SpriteRenderer>();
-
+        colliderGround = GetComponent<BoxCollider2D>();
 
     }
     // Use this for initialization
     void Start()
     {
         //guardar posicion actual de personaje 
-        startPosition=this.transform.position;
+        startPosition=transform.position;
+        startOffsetGround = colliderGround.offset;
+
     }
 
     public void StartGame(){
@@ -60,8 +74,11 @@ public class PlayerController : MonoBehaviour
     }
 
     void RestartPosition(){
-        this.transform.position=startPosition;
-        this.rigidBody.velocity=Vector2.zero;
+        //reiniciar posicion y velocidad
+        transform.position=startPosition;
+        rigidBody.velocity=Vector2.zero;
+        //reiniciar offset de collider ground
+        colliderGround.offset = startOffsetGround;
         //reiniciar camara
         GameObject mainCamera = GameObject.Find("Main Camera");
         mainCamera.GetComponent<CameraFollow>().ResetCameraPosition();
@@ -100,7 +117,7 @@ public class PlayerController : MonoBehaviour
 
         animator.SetBool(STATE_ONE_THE_GROUND, IsTouchingTheGround());
         //Gizmos rayo
-        Debug.DrawRay(this.transform.position, Vector2.down * 1.31f, Color.red);
+        Debug.DrawRay(transform.position, Vector2.down * jumpRaycastDistance, Color.red);
 
     }
 
@@ -126,6 +143,9 @@ public class PlayerController : MonoBehaviour
 
         if (IsTouchingTheGround())
         {
+            //audio jump
+            GetComponent<AudioSource>().PlayOneShot(audioJump);
+
             rigidBody.AddForce(Vector2.up * jumpForceFactor, ForceMode2D.Impulse);
         }
     }
@@ -154,7 +174,7 @@ public class PlayerController : MonoBehaviour
     //Nos indica si el personaje o no tocando el suelo
     bool IsTouchingTheGround()
     {
-        if (Physics2D.Raycast(this.transform.position, Vector2.down, 1.31f, groundMask))
+        if (Physics2D.Raycast(transform.position, Vector2.down, jumpRaycastDistance, groundMask))
         {
             //instancia compartida
             // GameManager.sharedInstance.currentGameState=GameState.inGame;
@@ -169,6 +189,8 @@ public class PlayerController : MonoBehaviour
     }
 
     public void Die(){
+        //modificacion de offset de collider ground
+        colliderGround.offset = new Vector2(0, 0);
 
         float travelledDistance = GetTravelledDistance();
         //persistir datos jugador - preferencias en sesion
@@ -178,28 +200,37 @@ public class PlayerController : MonoBehaviour
             PlayerPrefs.SetFloat("maxscore", travelledDistance);
         }
 
-        this.animator.SetBool(STATE_ALIVE,false);
+        animator.SetBool(STATE_ALIVE,false);
         GameManager.sharedInstance.GameOver();
+        //audio game over
+        GetComponent<AudioSource>().PlayOneShot(audioGameOver);
+
     }
 
 
     public void CollectHealth(int points)
     {
         Debug.Log("CollectHealth " + points);
-        this.healthPoints += points;
-        if (this.healthPoints>=MAX_HEALTH)
+        healthPoints += points;
+        if (healthPoints>=MAX_HEALTH)
         {
-            this.healthPoints = MAX_HEALTH;
+            healthPoints = MAX_HEALTH;
+        }
+
+        //muerte
+        if (healthPoints<=0)
+        {
+            Die();
         }
     }
 
     public void CollectMana(int points)
     {
         Debug.Log("CollectMana "+points);
-        this.manaPoints += points;
-        if (this.manaPoints >= MAX_MANA)
+        manaPoints += points;
+        if (manaPoints >= MAX_MANA)
         {
-            this.manaPoints = MAX_MANA;
+            manaPoints = MAX_MANA;
         }
     }
 
@@ -216,7 +247,7 @@ public class PlayerController : MonoBehaviour
 
     public float GetTravelledDistance()
     {
-        return this.transform.position.x - startPosition.x;
+        return transform.position.x - startPosition.x;
     }
 
 }

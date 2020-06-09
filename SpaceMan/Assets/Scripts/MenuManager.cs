@@ -10,9 +10,6 @@ public class MenuManager : MonoBehaviour {
     public Canvas menuGameOver;
     public Canvas gameCanvas;
 
-
-
-
     void Awake()
     {
         if (sharedInstance == null)
@@ -46,6 +43,7 @@ public class MenuManager : MonoBehaviour {
     {
         Debug.Log("ShowGameOverMenu");
         menuGameOver.enabled = true;
+
     }
 
     public void HideGameOverMenu()

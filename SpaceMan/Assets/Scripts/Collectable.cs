@@ -61,6 +61,8 @@ public class Collectable : MonoBehaviour {
             case CollectableType.money:
                 //notificar a game manager
                 GameManager.sharedInstance.CollectObject(this);
+                //audio coin
+                GetComponent<AudioSource>().Play();
                 break;
             case CollectableType.healthPotion:
                 //TODO: logica de la pocion de vida
