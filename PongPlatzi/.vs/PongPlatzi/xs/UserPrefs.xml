@@ -1,28 +1,37 @@
-﻿<Properties>
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/BallBehavior.cs">
+﻿<Properties StartupConfiguration="{B471D8AB-7BC9-A853-689C-A96E481579DD}|">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/DeadZone.cs">
     <Files>
-      <File FileName="Assets/Scripts/PlayerMovement.cs" Line="19" Column="1" />
-      <File FileName="Assets/Scripts/BallBehavior.cs" Line="37" Column="7" />
-      <File FileName="Assets/Scripts/DeadZone.cs" Line="19" Column="2" />
+      <File FileName="Assets/Scripts/BallBehavior.cs" Line="27" Column="13" />
+      <File FileName="Assets/Scripts/PlayerMovement.cs" Line="22" Column="2" />
+      <File FileName="Assets/Scripts/FollowBall.cs" Line="26" Column="10" />
+      <File FileName="Assets/Scripts/DeadZone.cs" Line="34" Column="6" />
+      <File FileName="Assets/Scripts/SceneChanger.cs" Line="13" Column="6" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
           <Node name="PongPlatzi" expanded="True">
-            <Node name="Assembly-CSharp" expanded="True">
-              <Node name="Assets" expanded="True">
-                <Node name="Scripts" expanded="True">
-                  <Node name="BallBehavior.cs" selected="True" />
-                </Node>
+            <Node name="Assets" expanded="True">
+              <Node name="Scripts" expanded="True">
+                <Node name="DeadZone.cs" selected="True" />
               </Node>
             </Node>
           </Node>
+        </State>
+      </Pad>
+      <Pad Id="MonoDevelop.Debugger.WatchPad">
+        <State />
+      </Pad>
+      <Pad Id="MonoDevelop.UnitTesting.TestPad">
+        <State name="__root__">
+          <Node name="PongPlatzi" expanded="True" selected="True" />
         </State>
       </Pad>
     </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="a7b5cf10-ce9c-4cea-bc31-2ddf54fa49e6" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>

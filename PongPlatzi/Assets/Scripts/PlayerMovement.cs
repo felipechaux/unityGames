@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour {
 
-	// Use this for initialization
-	void Start () {
+    private const float limitMovement = 3.8f;
+
+    // Use this for initialization
+    void Start () {
 		
 	}
 	
@@ -15,7 +17,6 @@ public class PlayerMovement : MonoBehaviour {
         Vector3 mousePos= Camera.main.ScreenToWorldPoint(Input.mousePosition); 
         //math operaciones matematicas
         //Camera.main.ScreenToWorldPoint traduce coordenadas a posicion del mundo
-        transform.position = new Vector3(transform.position.x,Mathf.Clamp(mousePos.y,-3.8f,3.8f),transform.position.z);
-
+        transform.position = new Vector3(transform.position.x,Mathf.Clamp(mousePos.y,-limitMovement,limitMovement),transform.position.z);
 	}
 }
