@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityStandardAssets.CrossPlatformInput;
 
 public class PlayerController : MonoBehaviour
 {
@@ -30,7 +31,7 @@ public class PlayerController : MonoBehaviour
     public const int INITIAL_HEALTH = 100, INITIAL_MANA = 15, MAX_HEALTH=200,MAX_MANA=30,MIN_HEALTH=10,MIN_MANA=0;
 
     public const int SUPERJUMP_COST = 5;
-    public const float SUPERJUMP_FORCE = 1.5f;
+    public const float SUPERJUMP_FORCE = 1.7f;
 
     public float jumpRaycastDistance = 1.5f;
 
@@ -41,13 +42,23 @@ public class PlayerController : MonoBehaviour
 
     public AudioClip audioJump;
     public AudioClip audioGameOver;
+    public AudioClip audioDamage;
+
+
+    Color colorPlayer;
 
 
     void Awake()
     {
+
         rigidBody = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         mySpriteRenderer = GetComponent<SpriteRenderer>();
+        
+        float r= 227;  // red component
+        float g= 116;  // green component
+        float b= 116;  // blue component
+  
         colliderGround = GetComponent<BoxCollider2D>();
 
     }
@@ -57,7 +68,21 @@ public class PlayerController : MonoBehaviour
         //guardar posicion actual de personaje 
         startPosition=transform.position;
         startOffsetGround = colliderGround.offset;
+        colorPlayer = mySpriteRenderer.color;
 
+    }
+
+    public void ChangeColorDamage()
+    {
+        Color colorDamage = new Color32(212, 105, 105, 255);
+        mySpriteRenderer.color = colorDamage;
+        GetComponent<AudioSource>().PlayOneShot(audioDamage);
+        Invoke("RestartColorPlayer", 0.5f);
+    }
+
+    void RestartColorPlayer()
+    {
+        mySpriteRenderer.color = colorPlayer;
     }
 
     public void StartGame(){
@@ -89,21 +114,21 @@ public class PlayerController : MonoBehaviour
     {
         if (GameManager.sharedInstance.currentGameState == GameState.inGame)
         {
-            if (Input.GetButtonDown("Jump"))
+            if ( CrossPlatformInputManager.GetButtonDown("Jump"))
             {
                 Jump(false);
             }
-            if (Input.GetButtonDown("SuperJump"))
+            if ( CrossPlatformInputManager.GetButtonDown("SuperJump"))
             {
                 Jump(true);
             }
 
-            if (Input.GetAxis("Horizontal") < 0)
+            if ( CrossPlatformInputManager.GetAxis("Horizontal") < 0)
             {
                 Left();
             }
 
-            if (Input.GetAxis("Horizontal") > 0)
+            if ( CrossPlatformInputManager.GetAxis("Horizontal") > 0)
             {
                 Right();
 
@@ -193,11 +218,14 @@ public class PlayerController : MonoBehaviour
         colliderGround.offset = new Vector2(0, 0);
 
         float travelledDistance = GetTravelledDistance();
-        //persistir datos jugador - preferencias en sesion
-        float previousMaxDistance = PlayerPrefs.GetFloat("maxscore",0f);
-        if (travelledDistance > previousMaxDistance)
+        float previousMaxDistance = PlayerPrefs.GetFloat("maxscore", 0f);
+        if (travelledDistance>0)
         {
-            PlayerPrefs.SetFloat("maxscore", travelledDistance);
+            //persistir datos jugador - preferencias en sesion
+            if (travelledDistance > previousMaxDistance)
+            {
+                PlayerPrefs.SetFloat("maxscore", travelledDistance);
+            }
         }
 
         animator.SetBool(STATE_ALIVE,false);

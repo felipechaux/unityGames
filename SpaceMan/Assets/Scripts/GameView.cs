@@ -28,10 +28,17 @@ public class GameView : MonoBehaviour
             float maxScore = PlayerPrefs.GetFloat("maxscore",0f);
 
             coinsText.text = coins.ToString();
-            scoreText.text = "Score " + score.ToString("f1");
+            if (score>0)
+            {
+                scoreText.text = "Score " + score.ToString("f1");
+                lastScoreText.text = score.ToString("f1");
+            }
+            else
+            {
+                scoreText.text = "Score " + 0;
+            }
             maxScoreText.text = "MaxScore: " + maxScore.ToString("f1");
             lastCoinsText.text = coins.ToString();
-            lastScoreText.text = score.ToString("f1");
         }
     }
 }

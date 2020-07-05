@@ -71,6 +71,7 @@ public class Enemy : MonoBehaviour {
         if (collision.tag == "Player")
         {
             collision.gameObject.GetComponent<PlayerController>().CollectHealth(-enemyDamage);
+            collision.gameObject.GetComponent<PlayerController>().ChangeColorDamage();
             return;
         }
 

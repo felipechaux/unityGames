@@ -20,6 +20,8 @@ public class Collectable : MonoBehaviour {
     //objeto jugador
     GameObject player;
 
+    public AudioClip audioMana, audioPotionLife;
+
 
     bool hasBeenCollected = false;
 
@@ -68,10 +70,13 @@ public class Collectable : MonoBehaviour {
                 //TODO: logica de la pocion de vida
                 //player controler no tiene instancia compartida - asi que se accede por medio de gameobject
                 player.GetComponent<PlayerController>().CollectHealth(this.value);
+                GetComponent<AudioSource>().PlayOneShot(audioPotionLife);
                 break;
             case CollectableType.manaPotion:
                 //TODO: logica de la pocion de mana
                 player.GetComponent<PlayerController>().CollectMana(this.value);
+                GetComponent<AudioSource>().PlayOneShot(audioMana);
+
                 break;
         }
     }
